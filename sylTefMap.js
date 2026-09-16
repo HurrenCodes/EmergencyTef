@@ -420,6 +420,8 @@ function SylTefMap(){
   }
   
   function initMap(){
+    console.log("Hello from dev branch");
+
     ensureWwwOrigin();
     
     initFindPageElems();
