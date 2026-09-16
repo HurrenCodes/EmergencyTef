@@ -315,6 +315,13 @@ function SylTefMap(){
     }
   }
   
+  function ensureUpgradeInsecureRequests(){
+    const metaCSP = document.createElement('meta');
+    metaCSP.httpEquiv = "Content-Security-Policy";
+    metaCSP.content = "upgrade-insecure-requests";
+    document.head.appendChild(metaCSP);
+  }
+  
   function initFindPageElems(){
     mapElem = requirePageIdElem("syl_map");
     serverErrorElem = requirePageIdElem("syl_map_error_box");
@@ -420,9 +427,9 @@ function SylTefMap(){
   }
   
   function initMap(){
-    console.log("Hello from dev branch");
-
     ensureWwwOrigin();
+
+    ensureUpgradeInsecureRequests();
     
     initFindPageElems();
     
@@ -1183,7 +1190,7 @@ function SylTefMap(){
   
     xhr.onreadystatechange = () => {
       // console.log(method + " onreadystatechange " + xhr.getResponseHeader('Location'));
-      const fullUrl = xhr.getResponseHeader('Location');
+      const fullUrl = xhr.responseURL;
       if(fullUrl != null) {
         // console.log(fullUrl);
         const name = fullUrl.substring(39, fullUrl.length);
