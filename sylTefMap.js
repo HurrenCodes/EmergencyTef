@@ -61,6 +61,7 @@ function SylTefMap(){
     this.generationNumber = 0;
     this.participantType = ParticipantType.NONE;
     this.state = 0;
+    this.username = "";
     this.userPageUrl = "";
     this.userPageLinkElem = null;
     this.userDetailText = "";
@@ -170,6 +171,7 @@ function SylTefMap(){
   let getPlayersUrl = "";
   let playerPageUrl = "";
   let playerPageTarget = "";
+  let participantSheetID = "";
   
   let findPlayerPageQueue = new Promise((resolve, reject) => {resolve()});
   
@@ -329,6 +331,7 @@ function SylTefMap(){
     getPlayersUrl = readDivDatasetUrl("syl_get_players_source");
     playerPageUrl = readDivDatasetUrl("syl_player_page_source");
     playerPageTarget = readDivDatasetUrl("syl_player_page_target");
+    participantSheetID = readDivDatasetUrl("syl_participant_sheet_id");
     
     playerPreviewElem = requirePageIdElem("syl_player_preview_container");
     playerCountElem = requirePageIdElem("syl_player_count");
@@ -1177,6 +1180,7 @@ function SylTefMap(){
   function getPlayerName(url, successCallback) {
     // const url = "/machine/playerpage.php?symbol=" + picto;
     const method = "HEAD";
+    // const method = "GET"; // TODO revert before flight
   
     // let resquestHeaders = [];
   
@@ -1190,11 +1194,14 @@ function SylTefMap(){
   
     xhr.onreadystatechange = () => {
       // console.log(method + " onreadystatechange " + xhr.getResponseHeader('Location'));
-      const fullUrl = xhr.responseURL;
-      if(fullUrl != null) {
-        // console.log(fullUrl);
-        const name = fullUrl.substring(39, fullUrl.length);
-        successCallback(name);
+      if(xhr.readyState == 4){
+        const fullUrl = xhr.responseURL;
+        // const fullUrl = "F".repeat(39) + xhr.responseText; // TODO revert before flight
+        if(fullUrl != null) {
+          // console.log(fullUrl);
+          const name = fullUrl.substring(39, fullUrl.length);
+          successCallback(name);
+        }
       }
     }
     
@@ -1276,6 +1283,7 @@ function SylTefMap(){
       (name) => {
         // console.log(name);
         const bioUrl = "/community/" + name;
+        entityData.username = name;
         entityData.userPageLinkElem.href = bioUrl;
         entityData.userPageUrl = bioUrl;
         getPlayerPage(
@@ -1730,8 +1738,70 @@ function SylTefMap(){
     displayPlayerCount();
   }
 
+  // Roles shenanigans
+
+  function processSheet(response) {
+    for(let entity of mapEntites){
+      if(entity.type == EntityType.PLAYER){
+        entity.data.participantType = ParticipantType.NONE;
+      }
+    }
+
+    const csv = response.split('\n');
+
+    csv.slice(1).forEach(pair => {
+      const [username, role] = pair.
+        split(',').
+        map(s => s.slice(1, -1));
+        
+      // console.log(username + ' ' + role);
+      for(let entity of mapEntites){
+        if(entity.type == EntityType.PLAYER){
+          if (entity.data.username == username) {
+            switch(role){
+              case "Judge":
+                entity.data.participantType = ParticipantType.JUDGE;
+                break;
+              case "Competitor":
+                entity.data.participantType = ParticipantType.COMPETITOR;
+                break;
+              case "Challenger":
+                entity.data.participantType = ParticipantType.CHALLENGER;
+                break;
+              case "Wildcard":
+                entity.data.participantType = ParticipantType.WILDCARD;
+                break;
+            }
+          }
+          // js is sequntial so it's fine to update elems here?
+          updatePlayerElem(entity);
+        }
+      }
+    });
+    
+  }
+
+  function updatePlayerRoles() {
+    let xhr = null;
+    if(window.XMLHttpRequest){
+      xhr = new XMLHttpRequest();
+    }else{
+      xhr = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState == 4) {
+        processSheet(xhr.response);
+      }
+    };
+
+    xhr.open('GET', `https://docs.google.com/spreadsheets/d/${participantSheetID}/gviz/tq?gid=851213703&tq=SELECT+D,A&tqx=out%3Acsv&_=` + Date.now().toString(), true);
+    xhr.send();
+  }
+
   function updateMap(xhr){
     updateMapEntities(xhr);
+    updatePlayerRoles();
     updateScreenElems();
   }
 
