@@ -1201,6 +1201,9 @@ function SylTefMap(){
         if(fullUrl != null) {
           // console.log(fullUrl);
           const name = fullUrl.substring(39, fullUrl.length);
+          if(name[0] == '/') {
+            name = name.slice(1);
+          }
           successCallback(name);
         }
       }
@@ -1778,7 +1781,7 @@ function SylTefMap(){
             break;
         }
 
-      console.log(username + participantMap.get(username));
+      console.log(username + " " + participantMap.get(username));
     });
 
 
@@ -1796,7 +1799,7 @@ function SylTefMap(){
       xhr = new ActiveXObject("Microsoft.XMLHTTP");
     }
 
-    xhr.onload = function () {
+    xhr.onload = () => {
       if(xhr.status >= 200 && xhr.status < 300){
         processSheet(xhr.response);
       }else{
