@@ -1642,7 +1642,7 @@ function SylTefMap(){
     
     const participantType = participantMap.get(entity.data.username);
 
-    console.log(entity.data.username + " " + participantType);
+    // console.log(entity.data.username + " " + participantType);
 
     switch(participantType){
       case ParticipantType.JUDGE:
@@ -1744,7 +1744,7 @@ function SylTefMap(){
   function updateScreenElems(){
     updateGroupElems();
 
-    console.log("call updateEntityElems in updateScreenElems");
+    // console.log("call updateEntityElems in updateScreenElems");
     
     updateEntityElems();
     trackHoveredEntiy();
@@ -1783,11 +1783,11 @@ function SylTefMap(){
             break;
         }
 
-      console.log(username + " " + participantMap.get(username));
+      // console.log(username + " " + participantMap.get(username));
     });
 
 
-    console.log("call updateEntityElems in processSheet");
+    // console.log("call updateEntityElems in processSheet");
     
     updateEntityElems();
     
