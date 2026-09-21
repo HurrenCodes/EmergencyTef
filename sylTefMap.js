@@ -1637,7 +1637,6 @@ function SylTefMap(){
     
     const participantType = participantMap.get(entity.data.username);
 
-    console.log(ParticipantType.JUDGE);
     console.log(entity.data.username + " " + participantType);
 
     switch(participantType){
@@ -1763,6 +1762,7 @@ function SylTefMap(){
         split(',').
         map(s => s.slice(1, -1));
 
+
         switch(role){
           case "Judge":
             participantMap.set(username, ParticipantType.JUDGE);
@@ -1777,6 +1777,8 @@ function SylTefMap(){
             participantMap.set(username, ParticipantType.WILDCARD);
             break;
         }
+
+      console.log(username + participantMap.get(username));
     });
 
 
