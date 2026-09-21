@@ -1637,7 +1637,8 @@ function SylTefMap(){
     
     const participantType = participantMap.get(entity.data.username);
 
-    console.log(participantType);
+    console.log(ParticipantType.JUDGE);
+    console.log(entity.data.username + " " + participantType);
 
     switch(participantType){
       case ParticipantType.JUDGE:
