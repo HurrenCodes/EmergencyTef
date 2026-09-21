@@ -1202,9 +1202,10 @@ function SylTefMap(){
           // console.log(fullUrl);
           const name = fullUrl.substring(39, fullUrl.length);
           if(name[0] == '/') {
-            name = name.slice(1);
+            successCallback(name.slice(1));
+          }else{
+            successCallback(name);
           }
-          successCallback(name);
         }
       }
     }
