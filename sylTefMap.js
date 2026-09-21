@@ -1782,16 +1782,18 @@ function SylTefMap(){
   }
 
   function updatePlayerRoles() {
-    let xhr = null;
+    let xhr = null; // idk why past me used xhr but I'll assume I had a reason and replace with fetch in The Rewrite
     if(window.XMLHttpRequest){
       xhr = new XMLHttpRequest();
     }else{
       xhr = new ActiveXObject("Microsoft.XMLHTTP");
     }
 
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState == 4) {
+    xhr.onload = function () {
+      if(xhr.status >= 200 && xhr.status < 300){
         processSheet(xhr.response);
+      }else{
+        console.log("error: " + xhr.status + ", " + xhr.statusText);
       }
     };
 
