@@ -59,7 +59,7 @@ function SylTefMap(){
     }
     this.pictoWord = "";
     this.generationNumber = 0;
-    this.participantType = ParticipantType.NONE;
+    // this.participantType = ParticipantType.NONE; // Don't store this in two places, let the map be source of truth and pay the cost because we're reacquiring it each update anyway
     this.state = 0;
     this.username = "";
     this.userPageUrl = "";
@@ -510,14 +510,14 @@ function SylTefMap(){
     }
   }
   
-  function setParticipantType(data, picto){
-    data.participantType = ParticipantType.NONE;
-    const role = participantMap.get(picto);
-    if(role){
-      data.participantType = role;
-    }
-    return 0;
-  }
+  // function setParticipantType(data, username){
+  //   data.participantType = ParticipantType.NONE;
+  //   const role = participantMap.get(username);
+  //   if(role){
+  //     data.participantType = role;
+  //   }
+  //   return 0;
+  // }
   
   function newPlayerData(picto, state){
     let data = new PlayerData();
@@ -568,7 +568,8 @@ function SylTefMap(){
       data.glyphRows.push(row);
     }
     
-    setParticipantType(data, picto);
+    // setParticipantType(data, picto); // has to move to after name
+    // data.participantType = ParticipantType.NONE;
     
     return data;
   }
@@ -1155,7 +1156,7 @@ function SylTefMap(){
       minDetailHeight = 13;
     }
     
-    appendParticipantType(textElem, entity);
+    // appendParticipantType(textElem, entity); // Can't do this rn, we assume participation types can change so more work is needed to update persistent data like entity.data
     
     let appendDetail = function(textElem, name, value){
       let nameElem = document.createElement("dt");
@@ -1634,7 +1635,8 @@ function SylTefMap(){
         break;
     }
     
-    switch(entityData.participantType){
+    const participantType = participantMap.get(entity.data.username);
+    switch(participantType){
       case ParticipantType.JUDGE:
         //entityStatusElem.innerHTML += "&sup;";
         entityStatusElem.innerHTML += "&thorn;";
@@ -1741,11 +1743,11 @@ function SylTefMap(){
   // Roles shenanigans
 
   function processSheet(response) {
-    for(let entity of mapEntites){
-      if(entity.type == EntityType.PLAYER){
-        entity.data.participantType = ParticipantType.NONE;
-      }
-    }
+    // for(let entity of mapEntites){
+    //   if(entity.type == EntityType.PLAYER){
+    //     entity.data.participantType = ParticipantType.NONE;
+    //   }
+    // }
 
     const csv = response.split('\n');
 
@@ -1753,31 +1755,24 @@ function SylTefMap(){
       const [username, role] = pair.
         split(',').
         map(s => s.slice(1, -1));
-        
-      // console.log(username + ' ' + role);
-      for(let entity of mapEntites){
-        if(entity.type == EntityType.PLAYER){
-          if (entity.data.username == username) {
-            switch(role){
-              case "Judge":
-                entity.data.participantType = ParticipantType.JUDGE;
-                break;
-              case "Competitor":
-                entity.data.participantType = ParticipantType.COMPETITOR;
-                break;
-              case "Challenger":
-                entity.data.participantType = ParticipantType.CHALLENGER;
-                break;
-              case "Wildcard":
-                entity.data.participantType = ParticipantType.WILDCARD;
-                break;
-            }
-          }
-          // js is sequntial so it's fine to update elems here?
-          updatePlayerElem(entity);
+
+        switch(role){
+          case "Judge":
+            participantMap.set(username, ParticipantType.JUDGE);
+            break;
+          case "Competitor":
+            participantMap.set(username, ParticipantType.COMPETITOR);
+            break;
+          case "Challenger":
+            participantMap.set(username, ParticipantType.CHALLENGER);
+            break;
+          case "Wildcard":
+            participantMap.set(username, ParticipantType.WILDCARD);
+            break;
         }
-      }
     });
+
+    updateEntityElems();
     
   }
 
