@@ -1636,6 +1636,9 @@ function SylTefMap(){
     }
     
     const participantType = participantMap.get(entity.data.username);
+
+    console.log(participantType);
+
     switch(participantType){
       case ParticipantType.JUDGE:
         //entityStatusElem.innerHTML += "&sup;";
@@ -1735,6 +1738,9 @@ function SylTefMap(){
   
   function updateScreenElems(){
     updateGroupElems();
+
+    console.log("call updateEntityElems in updateScreenElems");
+    
     updateEntityElems();
     trackHoveredEntiy();
     displayPlayerCount();
@@ -1772,6 +1778,9 @@ function SylTefMap(){
         }
     });
 
+
+    console.log("call updateEntityElems in processSheet");
+    
     updateEntityElems();
     
   }
