@@ -1794,6 +1794,12 @@ function SylTefMap(){
   }
 
   function updatePlayerRoles() {
+    if(Date.now() < Date("2026-09-25") || Date.now() > Date("2026-10-05")){
+      if(!window.location.href.includes("rut")){
+        return;
+      }
+    }
+
     let xhr = null; // idk why past me used xhr but I'll assume I had a reason and replace with fetch in The Rewrite
     if(window.XMLHttpRequest){
       xhr = new XMLHttpRequest();
