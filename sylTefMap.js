@@ -1317,7 +1317,7 @@ function SylTefMap(){
                   }catch(e){
                     displayErrorExeption(e);
                   }
-                  updatePlayerElem(); // To add participant type now that username is ready
+                  updatePlayerElem(entity); // To add participant type now that username is ready
                 // }else{
                   // let findPageRecursive = function(nameUrl, tries){
                   //   if(tries > maxUserPageTries){
