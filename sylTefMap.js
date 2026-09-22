@@ -1648,12 +1648,12 @@ function SylTefMap(){
       case ParticipantType.JUDGE:
         //entityStatusElem.innerHTML += "&sup;";
         entityStatusElem.innerHTML += "&thorn;";
-        entityStatusElem.style.color = "#ffcf00"; // fontSize?
+        entityStatusElem.style.color = "#ffd938";
         entityStatusElem.style.fontSize = "75%";
         break;
       case ParticipantType.COMPETITOR:
         entityStatusElem.innerHTML += "&#9808;&#xFE0E;";
-        entityStatusElem.style.color = "#ff1f04";
+        entityStatusElem.style.color = "#ff5d4f";
         entityStatusElem.style.fontSize = "75%";
         break;
       case ParticipantType.CHALLENGER:
@@ -1663,7 +1663,7 @@ function SylTefMap(){
         break;
       case ParticipantType.WILDCARD:
         entityStatusElem.innerHTML += "&#9802;&#xFE0E;";
-        entityStatusElem.style.color = "green";
+        entityStatusElem.style.color = "#8cdc5f";
         entityStatusElem.style.fontSize = "75%";
         break;
     }
