@@ -1794,7 +1794,7 @@ function SylTefMap(){
   }
 
   function updatePlayerRoles() {
-    if(Date.now() < new Date("2026-09-25") || Date.now() > new Date("2026-10-05")){
+    if(Date.now() < new Date("2026-09-25") || Date.now() > new Date("2026-10-06")){
       if(!window.location.href.includes("rut")){
         return;
       }
