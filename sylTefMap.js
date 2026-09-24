@@ -1793,11 +1793,20 @@ function SylTefMap(){
     
   }
 
+  let playerRolesInterval = 2 * 5; // Approx 5 minutes
+  let playerRolesTimer = playerRolesInterval - 1;
+
   function updatePlayerRoles() {
     if(Date.now() < new Date("2026-09-25") || Date.now() > new Date("2026-10-06")){
       if(!window.location.href.includes("rut")){
         return;
       }
+    }
+
+    // Do it this jank way for now until we can prove that reentering `updatePlayerElem` doesn't break the HTML
+    playerRolesTimer = (playerRolesTimer + 1) % playerRolesInterval;
+    if(playerRolesTimer > 0){
+      return;
     }
 
     let xhr = null; // idk why past me used xhr but I'll assume I had a reason and replace with fetch in The Rewrite
