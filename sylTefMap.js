@@ -1797,7 +1797,7 @@ function SylTefMap(){
   let playerRolesTimer = playerRolesInterval - 1;
 
   function updatePlayerRoles() {
-    if(Date.now() < new Date("2026-09-25") || Date.now() > new Date("2026-10-06")){
+    if(Date.now() < new Date("2026-10-10") || Date.now() > new Date("2026-10-19")){
       if(!window.location.href.includes("rut")){
         return;
       }
